@@ -1,3 +1,12 @@
+# not track
+check_points/
+runs/
+data/
+scratch/
+*.npy
+*.pt
+*.pth
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
