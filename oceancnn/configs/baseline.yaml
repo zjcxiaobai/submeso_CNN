@@ -1,7 +1,6 @@
 # data parameter
 data:
   path: "/scratch/jczhang/CNN_11/var"
-  batch_size: 32
   num_workers: 0
   splits: { frac_train: 0.60, frac_skip: 0.15, frac_val: 0.15, frac_test: 0.10 }
   shuffle: false
@@ -11,32 +10,46 @@ data:
 # model parameters
 model:
   name: "reentrant_channel"
+  batch_size: 32
   input_channels: 8
   conv_layers: 11
   kernel_size: 3
   activation: "SiLU"
-  use_residual: true
-  batch_norm: true
+  use_residual: true      # use residual block 
+  batch_norm: true        # apply batch normalization
   dropout_2D: 0.20
+
+# loss functions
+loss:
+# Allowed: "MSELoss", "L1Loss", "SmoothL1Loss", "HuberLoss"
+#  note: HuberLoss" is implemented as SmoothL1 with 'beta' == delta
+  name: "SmoothL1Loss"
+  kwargs:
+  beta: 1.0              # ignored for MSE/L1; acts as delta for Huber/SmoothL1
+  reduction: "mean"      # "mean" | "sum" | "none"
 
 # optimization
 optim:
+# Allowed: "AdamW", "Adam", "SGD"
   name: "AdamW"
   lr: 0.00747
+  momentum: 0.9   # for SGD
   weight_decay: 1.0e-3
-  betas: [0.9, 0.999]
+  betas: [0.9, 0.999]    # used by adam/adamW
 
 # learning rate schedule
 scheduler:
-  name: null
-  kwargs: {}
-
+  name: "CosineAnnealingLR"
+  kwargs: 
+    T_max: 50
+    eta_min: 1.0e-6
+    
 # training parameters
 train:
   epochs: 1000
   patience: 10
   grad_clip: 1.0
-  channels_last: false
+  use_channels_last: false
   checkpoint_dir: "./check_points"
   seed: 1337
 
