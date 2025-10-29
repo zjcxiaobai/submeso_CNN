@@ -1,0 +1,46 @@
+# data parameter
+data:
+  path: "/scratch/jczhang/CNN_11/var"
+  batch_size: 32
+  num_workers: 0
+  splits: { frac_train: 0.60, frac_skip: 0.15, frac_val: 0.15, frac_test: 0.10 }
+  shuffle: false
+  normalize_x: true
+  normalize_y: true
+
+# model parameters
+model:
+  name: "reentrant_channel"
+  input_channels: 8
+  conv_layers: 11
+  kernel_size: 3
+  activation: "SiLU"
+  use_residual: true
+  batch_norm: true
+  dropout_2D: 0.20
+
+# optimization
+optim:
+  name: "AdamW"
+  lr: 0.00747
+  weight_decay: 1.0e-3
+  betas: [0.9, 0.999]
+
+# learning rate schedule
+scheduler:
+  name: null
+  kwargs: {}
+
+# training parameters
+train:
+  epochs: 1000
+  patience: 10
+  grad_clip: 1.0
+  channels_last: false
+  checkpoint_dir: "./check_points"
+  seed: 1337
+
+# run parameters
+run:
+  trial_id: 2
+  save_params_to: "trial_{trial_id}.pt"
